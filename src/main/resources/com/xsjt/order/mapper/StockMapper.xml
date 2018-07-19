@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xsjt.order.mapper.StockMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xsjt.order.model.Stock">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="count" property="count" />
+        <result column="sale" property="sale" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <!-- 乐观锁更新数据库 -->
+    <update id="updateStockByOptimistic" parameterType="com.xsjt.order.model.Stock">
+        update stock set sale = sale + 1, version = version + 1
+        where id=#{id,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+    </update>
+
+</mapper>

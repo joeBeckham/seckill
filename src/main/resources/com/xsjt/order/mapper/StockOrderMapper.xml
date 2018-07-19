@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xsjt.order.mapper.StockOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xsjt.order.model.StockOrder">
+        <id column="id" property="id" />
+        <result column="sid" property="sid" />
+        <result column="name" property="name" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <insert id="insertOrder" parameterType="com.xsjt.order.model.StockOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into stock_order
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="sid != 0">
+              sid,
+            </if>
+            <if test="name != null">
+              name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="sid != 0">
+                #{sid},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

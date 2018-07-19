@@ -1,0 +1,84 @@
+server:
+  port: 8989
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/seckill?useSSL=true&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password:
+    # 下面为连接池的补充设置，应用到上面所有数据源中
+    # 初始化大小，最小，最大
+    allow: 127.0.0.1,192.168.0.102          #白名单
+    loginUsername: admin                    #用户名
+    loginPassword: 123                      #密码
+    resetEnable: false                      #是否可以重置
+    deny: 3.4.122.2                         #黑名单
+    initialSize: 1
+    minIdle: 3
+    maxActive: 20
+    maxWait: 60000                          #配置获取连接等待超时的时间
+    timeBetweenEvictionRunsMillis: 60000    #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    minEvictableIdleTimeMillis: 30000       #配置一个连接在池中最小生存的时间，单位是毫秒
+    validationQuery: select 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true            #打开PSCache，并且指定每个连接上PSCache的大小
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,slf4j                 #配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    # 合并多个DruidDataSource的监控数据
+    #useGlobalDataSourceStat: true
+  mvc:
+    #访问一个不存在的页面时是否抛出异常,此处抛出异常方便捕捉后返回前台
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+    static-locations: classpath:static/
+
+# redis配置
+redis:
+  # 集群
+  cluster:
+    nodes:
+      cluster:
+        max-redirects: 1
+        nodes: 192.168.10.28:6379
+        password:
+  # 单点
+  pool:
+    host: 192.168.10.28
+    port: 6379
+    password:
+    maxIdle: 1
+    maxWaitMillis: -1
+    maxActive: 1
+    minIdle: 0
+    maxTotal: 500
+    testOnBorrow: true
+    testOnReturn: false
+    blockWhenExhausted: false
+    numTestsPerEvictionRun: 3
+  # 限流大小
+  limit: 10
+
+# mybatis-plus配置信息
+mybatis-plus:
+  mapper-locations: classpath:/mapper/xml/*Mapper.xml
+  typeAliasesPackage: com.xsjt
+  global-config:
+    id-type: 0  #0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)
+    db-column-underline: false
+    refresh-mapper: true
+  configuration:
+    map-underscore-to-camel-case: false
+    cache-enabled: true #配置的缓存的全局开关
+    lazyLoadingEnabled: true #延时加载的开关
+    multipleResultSetsEnabled: true #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
+
+# 日志
+logging:
+  config: classpath:logback-xsjt.xml
+  path: /data/xsjt-manager-log
+
